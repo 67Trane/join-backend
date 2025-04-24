@@ -12,7 +12,7 @@ class Status(models.Model):
     todo = models.CharField(max_length=50)
     urgent = models.CharField(max_length=50)
 
-# the curent user
+# the curent user  
 class CurrentUser(models.Model):
     token = models.CharField(max_length=200, blank=True)
     nameIn = models.CharField(max_length=100)
