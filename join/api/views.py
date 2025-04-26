@@ -1,3 +1,4 @@
+from django.http import Http404
 from join.models import Task, Contact, CurrentUser, Status, SubTask
 from rest_framework import viewsets
 from .serializers import SubTaskSerializer, TaskSerializer, ContactSerializer, StatusSerializer, CurrentUserSerializer, EmailAuthTokenSerializer
@@ -82,15 +83,60 @@ class ContactsView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Contact.objects.filter(user=self.request.user)
-
-
+    
 class CurrentUserView(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     queryset = CurrentUser.objects.all()
     serializer_class = CurrentUserSerializer
+    
+    def update(self, request, *args, **kwargs):
+
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        pk = kwargs.get(lookup_url_kwarg)
+
+        try:
+            # Try the normal update path
+            return super().update(request, *args, **kwargs)
+        except Http404:
+            # Not found: create it instead
+            data = request.data.copy()
+            data[self.lookup_field] = pk
+            serializer = self.get_serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            obj = serializer.save()
+
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
 
 
 class StatusView(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
+
+    def update(self, request, *args, **kwargs):
+        """
+        Handle PUT /Status/<pk>/ as create-or-update:
+        - If the object exists, do a normal update.
+        - If it doesn't, create a new one with pk=<pk>.
+        """
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        pk = kwargs.get(lookup_url_kwarg)
+
+        try:
+            # Try the normal update path
+            return super().update(request, *args, **kwargs)
+        except Http404:
+            # Not found: create it instead
+            data = request.data.copy()
+            data[self.lookup_field] = pk
+            serializer = self.get_serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            obj = serializer.save()
+
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
