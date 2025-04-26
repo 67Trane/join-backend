@@ -1,4 +1,7 @@
 # Python (Django)
+*.env
+../env/
+.env
 ./env/
 __pycache__/
 *.pyc
@@ -9,7 +12,7 @@ __pycache__/
 .vscode/
 
 # Sonstiges
-.env
+
 
 # Auto Start für StreamDeck
 open-backend.bat
