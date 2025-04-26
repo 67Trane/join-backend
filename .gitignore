@@ -1,6 +1,9 @@
 # Python (Django)
-*.env
-../env/
+
+*/env/*
+*/env
+*/.env
+../env/*
 .env
 ./env/
 __pycache__/
