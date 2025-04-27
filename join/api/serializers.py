@@ -2,6 +2,7 @@ from rest_framework import serializers
 from join.models import Task, Contact, Status, SubTask, CurrentUser
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from rest_framework.validators import UniqueValidator
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -15,18 +16,25 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 'write_only': True
             }
         }
-        
+
     def save(self):
+        email = self.validated_data['email']
         pw = self.validated_data['password']
         repeated_pw = self.validated_data['repeated_password']
-        
+
         if pw != repeated_pw:
             raise serializers.ValidationError({'error': 'Password dont match'})
-        
-        account = User(email=self.validated_data['email'], username=self.validated_data['username'])
+
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError(
+                {'email': 'Diese E-Mail ist bereits vergeben.'})
+
+        account = User(
+            email=self.validated_data['email'], username=self.validated_data['username'])
         account.set_password(pw)
         account.save()
         return account
+
 
 class EmailAuthTokenSerializer(serializers.Serializer):
     email = serializers.EmailField(label="E-Mail")
@@ -40,15 +48,18 @@ class EmailAuthTokenSerializer(serializers.Serializer):
         try:
             user_obj = User.objects.get(email=email)
         except User.DoesNotExist:
-            raise serializers.ValidationError("Ungültige E-Mail / Passwort Kombination.")
+            raise serializers.ValidationError(
+                "Ungültige E-Mail / Passwort Kombination.")
 
         # authenticate erwartet einen username, also leiten wir weiter
         user = authenticate(username=user_obj.username, password=password)
         if not user:
-            raise serializers.ValidationError("Ungültige E-Mail / Passwort Kombination.")
+            raise serializers.ValidationError(
+                "Ungültige E-Mail / Passwort Kombination.")
 
         attrs['user'] = user
         return attrs
+
 
 class SubTaskSerializer(serializers.ModelSerializer):
 
