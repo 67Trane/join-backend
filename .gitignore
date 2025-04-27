@@ -1,5 +1,6 @@
 # Python (Django)
 
+env/
 */env/*
 */env
 */.env
