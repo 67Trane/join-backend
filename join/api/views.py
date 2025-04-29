@@ -66,7 +66,6 @@ class TaskView(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def subtask(self, request, pk=None):
-        # pk ist hier die Task‑ID
         task = self.get_object()
         subs = task.subtask.all()
         page = self.paginate_queryset(subs)
@@ -117,11 +116,6 @@ class StatusView(viewsets.ModelViewSet):
     serializer_class = StatusSerializer
 
     def update(self, request, *args, **kwargs):
-        """
-        Handle PUT /Status/<pk>/ as create-or-update:
-        - If the object exists, do a normal update.
-        - If it doesn't, create a new one with pk=<pk>.
-        """
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
         pk = kwargs.get(lookup_url_kwarg)
 
