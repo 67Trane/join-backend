@@ -72,22 +72,6 @@ Ein REST-API-Backend für das **JOIN** Projektmanagement-Tool, implementiert mit
 
 ---
 
-## 🔑 Umgebungsvariablen
-
-Lege eine `.env`-Datei im Projekt-Root an und definiere:
-
-```ini
-# .env
-DEBUG=True
-SECRET_KEY=DEIN_DJANGO_SECRET_KEY
-ALLOWED_HOSTS=127.0.0.1,localhost
-DATABASE_URL=sqlite:///db.sqlite3    # oder PostgreSQL-URL
-```
-
-Weitere Einstellungen siehe `join_backend/settings.py`.
-
----
-
 ## 🗄 Datenbank-Migration
 
 ```bash
@@ -145,16 +129,6 @@ Der API-Server läuft dann standardmäßig auf `http://127.0.0.1:8000/api/`.
 
 ---
 
-## 🧪 Tests
-
-(*falls vorhanden – hier beschreiben*)  
-Beispiel:
-
-```bash
-python manage.py test
-```
-
----
 
 ## ☁️ Deployment
 
@@ -185,4 +159,4 @@ Details siehe [LICENSE](./LICENSE).
 
 ## 📫 Kontakt
 
-Bei Fragen: <deine.email@example.com> oder per GitHub-Issue.
+Bei Fragen: <mehmet.deliaci.dev@gmail.com> oder per GitHub-Issue.
