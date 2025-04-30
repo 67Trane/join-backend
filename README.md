@@ -15,10 +15,8 @@ Ein REST-API-Backend für das **JOIN** Projektmanagement-Tool, implementiert mit
 7. [Starten des Servers](#starten-des-servers)
 8. [API-Routen](#api-routen)
 9. [Serializers & Modelle](#serializers--modelle)
-10. [Tests](#tests)
-11. [Deployment](#deployment)
-12. [Contributing](#contributing)
-13. [Lizenz](#lizenz)
+10. [Contributing](#contributing)
+11. [Lizenz](#lizenz)
 
 ---
 
